@@ -19,6 +19,7 @@ include(
     'components/url_settings.py',
     'components/rest_framework.py',
     'components/simple_jwt.py',
+    'components/elasticsearch.py',
     'components/project_settings.py',
     'components/debug_settings.py',
 )

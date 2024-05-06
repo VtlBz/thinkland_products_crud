@@ -9,7 +9,7 @@ DEBUG = os.getenv('DEBUG_STATE', 'False') == 'True'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', DEFAULT_HOSTS).split()
 
-INTERNAL_IPS = os.getenv('INTERNAL_ADDRESSES', '').split()
+INTERNAL_IPS = os.getenv('INTERNAL_ADDRESSES', '').strip('"').split()
 
 WSGI_APPLICATION = 'config.wsgi.application'
 

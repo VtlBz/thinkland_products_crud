@@ -1,0 +1,48 @@
+services:
+
+  database:
+    image: postgres:15.5-alpine3.19
+    container_name: ${COMPOSE_PROJECT_NAME}-db
+    restart: on-failure
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - pg_data:/var/lib/postgresql/data/
+    ports:
+      - ${DB_PORT}:5432
+    networks:
+      - lan
+    env_file:
+      - .env
+
+  textsearch:
+    image: elasticsearch:8.12.2
+    container_name: ${COMPOSE_PROJECT_NAME}-es
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - es_data:/var/lib/elasticsearch/data
+    ports:
+      - ${ES_PORT}:9200
+    networks:
+      - lan
+    env_file:
+      - .env
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+
+volumes:
+  pg_data:
+  es_data:
+
+networks:
+  lan:
+    driver: bridge
